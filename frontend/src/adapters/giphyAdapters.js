@@ -1,12 +1,13 @@
 import { handleFetch } from './handleFetch.js'
 
-const API_KEY = 'How can I include this without exposing it to the public?'
-
-// Send a fetch request to the /trending endpoint and return the top 3 results
+// This function fetches data from the /api/gifs endpoint that was set up in the backend
+// It retrieves trending GIFs from the API
 export const getTrendingGifs = async () => {
-  return await handleFetch(`https://api.giphy.com/v1/gifs/trending?api_key=${API_KEY}&limit=3`)
+  return await handleFetch(`/api/gifs`)
 }
 
+// This function fetches GIFs based on the search term
+// The search term is used as a query parameter in the API request
 export const getGifsBySearch = async (searchTerm) => {
-
+  return await handleFetch(`/api/gifs?search=${searchTerm}`);
 }
