@@ -1,20 +1,30 @@
-import { getTrendingGifs } from '../adapters/giphyAdapters';
+import { getTrendingGifs, getGifsBySearch } from '../adapters/giphyAdapters';
 import { useEffect, useState } from 'react';
 
-function GifContainer() {
+function GifContainer({searchTerm}) {
     const [gifs, setGifs] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        // I create the doFetch function here because useEffect can't be async directly
+        // Since we need to fetch data and wait for the result, we use an async function inside useEffect
         const doFetch = async () => {
-            const [data, error] = await getTrendingGifs();
+            // I fetch either trending GIFs or search results depending on whether there's a search term
+            const [data, error] = searchTerm? 
+            await getGifsBySearch(searchTerm): await getTrendingGifs();
+
+            // If there's an error, I set the error state
             if (error) {
                 return setError(error);
             }
+
+            // I set the fetched GIFs to display
             setGifs(data.data);
         }
         doFetch();
-    }, []);
+    // When the user submits the search form, searchTerm gets updated
+    // This triggers the useEffect again and fetches the new results
+    }, [searchTerm]);
 
     if (!gifs) {
         return (
